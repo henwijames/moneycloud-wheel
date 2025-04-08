@@ -2,6 +2,8 @@ $(document).ready(function () {
   const $wheelInner = $(".wheel-inner");
   const $spinButton = $(".spin-button");
   const $spinsCountElement = $(".spins-count span");
+  const $register = $(".register");
+  const $closeRegister = $(".close-register");
 
   const prizes = [
     { name: "200%", description: "On your Deposit" },
@@ -76,6 +78,8 @@ $(document).ready(function () {
     const $prize = $(".prize");
     const $prizeCard = $prize.find(".prize-card");
     const $prizeButton = $prizeCard.find("button");
+    const $register = $(".register");
+    const $registerContent = $register.find(".register-content h3");
 
     $prizeCard.find("h3").text(prize.name);
     $prizeCard.find("h4").text(prize.description);
@@ -84,15 +88,48 @@ $(document).ready(function () {
     if (spinsLeft > 0) {
       $prizeButton.text("SPIN AGAIN");
     } else {
-      $prizeButton.text("CLOSE");
+      $prizeButton.text("SPIN AGAIN");
     }
 
     $prize.fadeIn(300);
 
     $prizeButton.off("click").on("click", () => {
       $prize.fadeOut(300);
-      // If the user has spins left, trigger the spin wheel
-      if (spinsLeft > 0 && !isSpinning) {
+
+      // If the user has no spins left, show the register form
+      if (spinsLeft <= 0) {
+        // Format the prizes for display in the register form
+        let prizeText = "";
+
+        // Group prizes by type
+        const prizeGroups = {};
+        userPrizes.forEach((p) => {
+          const key = `${p.name} ${p.description}`;
+          if (!prizeGroups[key]) {
+            prizeGroups[key] = 0;
+          }
+          prizeGroups[key]++;
+        });
+
+        // Create the display text
+        const prizeEntries = Object.entries(prizeGroups);
+        if (prizeEntries.length > 0) {
+          prizeText = prizeEntries
+            .map(([prize, count]) => {
+              return `${count}x ${prize}`;
+            })
+            .join(" <span>&</span> ");
+        } else {
+          prizeText = "No prizes yet";
+        }
+
+        // Update the register form heading
+        $registerContent.html(prizeText);
+
+        // Show the register form
+        $register.fadeIn(300);
+      } else if (!isSpinning) {
+        // If the user has spins left, trigger the spin wheel
         spinWheel();
       }
     });
@@ -129,8 +166,30 @@ $(document).ready(function () {
         const prizeIndex = Math.floor(adjustedAngle / segmentAngle);
         const wonPrize = prizes[prizeIndex];
 
+        // Check if user has already won 3 Free Spins
+        const hasWonFreeSpins = userPrizes.some(
+          (prize) => prize.name === "3" && prize.description === "Free Spins"
+        );
+
+        // If the prize is 3 Free Spins and user has already won it, change to a different prize
+        let finalPrize = wonPrize;
+        if (
+          wonPrize.name === "3" &&
+          wonPrize.description === "Free Spins" &&
+          hasWonFreeSpins
+        ) {
+          // Change to "ONE More Try" instead
+          finalPrize = { name: "ONE", description: "More Try" };
+          console.log(
+            "User already won 3 Free Spins, changing to ONE More Try"
+          );
+        }
+
         // Add spins based on the prize won
-        if (wonPrize.name === "3" && wonPrize.description === "Free Spins") {
+        if (
+          finalPrize.name === "3" &&
+          finalPrize.description === "Free Spins"
+        ) {
           spinsLeft += 3;
           $spinsCountElement.text(spinsLeft);
           $spinButton.prop("disabled", false).css("opacity", "1");
@@ -142,8 +201,8 @@ $(document).ready(function () {
             $spinsCount.removeClass("spins-added");
           }, 2000);
         } else if (
-          wonPrize.name === "ONE" &&
-          wonPrize.description === "More Try"
+          finalPrize.name === "ONE" &&
+          finalPrize.description === "More Try"
         ) {
           spinsLeft += 1;
           $spinsCountElement.text(spinsLeft);
@@ -159,8 +218,8 @@ $(document).ready(function () {
 
         // Store the won prize in the user's prizes array
         userPrizes.push({
-          name: wonPrize.name,
-          description: wonPrize.description,
+          name: finalPrize.name,
+          description: finalPrize.description,
           date: new Date().toISOString(),
         });
 
@@ -172,10 +231,22 @@ $(document).ready(function () {
             2
           )}°, Prize Index: ${prizeIndex}`
         );
-        showPrizeNotification(wonPrize);
+        showPrizeNotification(finalPrize);
       }, 5000);
     }
   };
 
   $spinButton.on("click", spinWheel);
+
+  // Close register form when close button is clicked
+  $closeRegister.on("click", function () {
+    $register.fadeOut(300);
+  });
+
+  // Close register form when clicking outside the card
+  $register.on("click", function (e) {
+    if ($(e.target).is($register)) {
+      $register.fadeOut(300);
+    }
+  });
 });

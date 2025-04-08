@@ -248,60 +248,138 @@ main {
       width: 100%;
       height: 100vh;
       background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      display: flex;
-      transform: none;
       padding: 20px;
-
-      .register-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        img {
-          width: 150px;
-        }
-
-        .register-card {
-          background: rgb(213, 184, 255);
-          background: linear-gradient(
-            180deg,
-            rgba(213, 184, 255, 0.3) 0%,
-            rgba(148, 88, 224, 0.3) 100%
-          );
-          border-radius: 10px;
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(100px);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          width: 450px;
-          height: 300px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          position: relative;
-          margin-top: -50px;
-
-          .register-heading {
-            position: absolute;
-            top: -20px;
-            border-radius: 30px;
-            background: #9458e0;
-
-            h3 {
-              font-size: 18px;
-              color: #ffa700;
-              font-weight: 900;
-              padding: 10px;
-            }
-          }
-        }
-      }
+      display: none; /* Hidden by default */
+    }
+    .register-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .register-wrapper img {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+    .register-card {
+      background: rgb(213, 184, 255);
+      background: linear-gradient(
+        180deg,
+        rgba(213, 184, 255, 0.3) 0%,
+        rgba(148, 88, 224, 0.3) 100%
+      );
+      border-radius: 30px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(100px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      padding: 30px;
+    }
+    .register-heading {
+      position: absolute;
+      top: -20px;
+      border-radius: 30px;
+      background: #9458e0;
+    }
+    .register-heading h4 {
+      font-size: 18px;
+      color: #ffa700;
+      font-weight: 900;
+      padding: 10px;
+    }
+    .register-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .register-content h3 {
+      font-weight: 900;
+      font-size: 28px;
+      font-style: italic;
+      color: #fdb515;
+      margin-bottom: 20px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .register-content h3 span {
+      color: #ffffff;
+      margin: 0 5px;
+    }
+    .register-content form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .register-input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 5px;
+      font-size: 16px;
+      background-color: #d5b8ff;
+      border-radius: 50px;
+      color: #fff;
+      text-align: center;
+      border: 3px solid #9458e0;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .register-input::placeholder {
+      color: #9458e0;
+      opacity: 1; /* Firefox */
+    }
+    .register-btn {
+      font-size: 16px;
+      font-weight: 900;
+      color: #fff;
+      background-color: #fdb71b;
+      border-radius: 50px;
+      padding: 15px 25px 15px 25px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 340px;
+      align-self: center;
+      margin-top: 20px !important;
+      line-height: 1.2em !important;
+      border: none;
+    }
+    .close-register {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #9458e0;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    .close-register:hover {
+      background-color: rgba(148, 88, 224, 0.2);
+      transform: scale(1.1);
     }
     .prize {
       position: fixed;
